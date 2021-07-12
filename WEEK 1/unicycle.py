@@ -42,10 +42,18 @@ class Unicycle:
             x, y, theta (float): final pose 
         """
 
-        return x, y, theta
+        for i in range(n):
+            self.theta += w*self.dt   # angle = angle + angular_velociy * delta
+            self.x += v*np.cos(self.theta)*self.dt # X = X + horizontal_velocity * delta
+            self.y += v*np.sin(self.theta)*self.dt # Y = Y + vertical_velocity * delta
+            self.x_points.append(self.x)
+            self.y_points.append(self.y)
+
+        return self.x, self.y, self.theta
 
     def plot(self, v: float, w: float):
         """Function that plots the intermeditate trajectory of the Robot"""
+        plt.figure()
         plt.title(f"Unicycle Model: {v}, {w}")
         plt.xlabel("X-Coordinates")
         plt.ylabel("Y-Coordinates")
@@ -53,11 +61,31 @@ class Unicycle:
         plt.grid()
 
         # If you want to view the plot uncomment plt.show() and comment out plt.savefig()
-        plt.show()
+        # plt.show()
         # If you want to save the file, uncomment plt.savefig() and comment out plt.show()
-        # plt.savefig(f"Unicycle_{v}_{w}.png")
-
+        
+        plt.savefig(f"Unicycle_{v}_{w}.png")
+   
 if __name__ == "__main__":
     print("Unicycle Model Assignment")
 
     # make an object of the robot and plot various trajectories
+
+
+    # 1. Start=(0, 0, 0); dt=0.1; vel=(1, 0.5); timesteps: 25
+    uni = Unicycle(0, 0, 0, 0.1)
+    uni.step(1, 0.5, 25)
+    uni.plot(1, 0.5)
+    # -------------------------
+
+    # 2. Start=(0, 0, 1.57); dt=0.2; vel=(0.5, 1); timesteps: 10
+    uni = Unicycle(0, 0, 1.57, 0.2)
+    uni.step(0.5, 1, 10)
+    uni.plot(0.5, 1)
+    # -------------------------
+
+    # 3. Start(0, 0, 0.77); dt=0.05; vel=(5, 4); timestep: 50
+    uni = Unicycle(0, 0, 0.77, 0.05)
+    uni.step(5, 4, 50)
+    uni.plot(5, 4)
+    # -------------------------
